@@ -1,0 +1,268 @@
+/* .liabilities-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+} */
+
+.liabilities-layout {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.liabilities-left {
+  flex: 2;
+}
+
+.liabilities-right {
+  flex: 1;
+  min-width: 300px;
+}
+
+.liability-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-light {
+  background-color: #F2F5F2;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-light:hover {
+  background-color: #E8F2ED;
+}
+
+.total-liability-card {
+  border: 1px solid #DEE3E0;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  background-color: #fff;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+.total-liability-card h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+.total-liability-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #FF5722;
+  margin: 0;
+}
+
+/* Table styles */
+.liability-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.liability-table th,
+.liability-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.liability-table th {
+  background-color: #f2f5f2;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.liability-table td {
+  background-color: #fff;
+  color: #374151;
+  font-size: 0.94rem;
+}
+
+.liability-table tr:last-child td {
+  border-bottom: none;
+}
+
+.liability-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.liability-table td select,
+.liability-table td input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 80%;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+}
+
+/* Inline Editing Styles */
+.inline-edit-row {
+  background-color: #f8f9fa;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.inline-edit-row td {
+  padding: 8px 15px;
+  vertical-align: middle;
+}
+
+.inline-select,
+.inline-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.inline-select:focus,
+.inline-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(56, 224, 120, 0.2);
+}
+
+.inline-select {
+  cursor: pointer;
+}
+
+.inline-input[type="number"] {
+  text-align: right;
+}
+
+/* Action Buttons */
+.save-btn,
+.cancel-btn,
+.edit-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  margin: 0 2px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.save-btn {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.save-btn:hover {
+  background-color: #d4edda;
+  color: #1e7e34;
+}
+
+.cancel-btn {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.cancel-btn:hover {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.edit-btn:hover {
+  background-color: #e2e6ea;
+}
+
+.delete-btn:hover {
+  background-color: #f8d7da;
+}
+
+/* Due Date Styling */
+.due-date-overdue {
+  color: red;
+  font-weight: 500;
+}
+
+.due-date-upcoming {
+  color: #333;
+}
+
+/* Chart Section */
+.liability-chart-section {
+  padding: 1.5rem;
+  border: 1px solid #DEE3E0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.liability-chart-section h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .liabilities-layout {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .liabilities-right {
+    min-width: auto;
+  }
+
+  .liability-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .btn-light {
+    width: 100%;
+    text-align: center;
+  }
+
+  .total-liability-card {
+    width: 100%;
+    text-align: center;
+  }
+
+  .liability-table {
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .inline-select,
+  .inline-input {
+    padding: 6px;
+    font-size: 12px;
+  }
+}

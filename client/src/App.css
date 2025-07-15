@@ -1,0 +1,73 @@
+/* Prevent horizontal scroll and standardize body */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+/* No Sidebar Layout Container */
+.app-container-no-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Main content area without sidebar */
+.main-content-no-sidebar {
+  flex: 1;
+  margin-top: 40px;
+  padding: 2rem 6%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Consistent Page Wrapper */
+.page-wrapper {
+  padding: 0 6%;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Footer sticky to bottom */
+footer {
+  margin-top: auto;
+  padding: 1rem 6%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
+  background-color: #f1f1f1;
+  border-top: 1px solid #e0e0e0;
+}
+
+.full-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.full-wrapper > .footer {
+  margin-top: auto;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .page-wrapper,
+  .main-content-no-sidebar {
+    padding: 2rem 1rem;
+  }
+
+  footer {
+    padding: 1rem;
+  }
+}

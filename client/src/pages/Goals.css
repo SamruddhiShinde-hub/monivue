@@ -1,0 +1,74 @@
+.goals-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #fff;
+}
+
+.goals-page h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+}
+
+.goals-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.goals-table th {
+  background: #f8f9fa;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #4a4a4a;
+  padding: 1rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.goals-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+/* .goals-table tbody tr:hover {
+  background: #fafafa;
+} */
+
+.goals-table input,
+.goals-table select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+}
+
+.goals-table input:focus,
+.goals-table select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.goals-table button {
+  padding: 0.5rem 1rem;
+  background: #38E078;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.goals-table button:hover {
+  background-color: #d4edda;
+  color: #1e7e34;
+}

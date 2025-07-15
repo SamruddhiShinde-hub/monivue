@@ -1,0 +1,151 @@
+/* .networth-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+} */
+
+.networth-cards {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.networth-summary-card {
+  border: 1px solid #DEE3E0;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.networth-summary-card h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.networth-summary-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #38E078;
+}
+
+.networth-layout {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.networth-left {
+  flex: 2;
+}
+
+.networth-right {
+  flex: 1;
+  min-width: 300px;
+}
+
+.donut-chart {
+  padding: 1.5rem;
+  border: 1px solid #DEE3E0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.donut-chart h3 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.reset-btn {
+  margin-top: 1rem;
+  background-color: #f2f2f2;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.reset-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Dual Table Layout */
+.side-by-side-tables {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.breakdown-table {
+  width: 100%;
+  flex: 1;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.breakdown-table th,
+.breakdown-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.breakdown-table th {
+  background-color: #f2f5f2;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.breakdown-table td {
+  background-color: #fff;
+  color: #374151;
+  font-size: 0.94rem;
+}
+
+.row-green {
+  background-color: #eafaf0;
+  color: #2f7d4d;
+}
+
+.row-red {
+  background-color: #ffecec;
+  color: #c0392b;
+}
+
+.row-greyed {
+  opacity: 0.4;
+}
+
+.total-row td {
+  background-color: #f9f9f9;
+  font-weight: bold;
+  color: #222;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .networth-layout {
+    flex-direction: column;
+  }
+
+  .networth-left,
+  .networth-right,
+  .side-by-side-tables {
+    width: 100%;
+    flex-direction: column;
+  }
+}

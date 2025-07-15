@@ -1,0 +1,107 @@
+.sip-wrapper {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border: 1px solid #dbe5de;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
+}
+
+.sip-wrapper h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1f1f1f;
+}
+
+.sip-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.sip-inputs,
+.sip-result {
+  flex: 1;
+  min-width: 320px;
+}
+
+.sip-result {
+  padding: 1.5rem;
+  background-color: #f9fdf9;
+  border: 1px solid #dbe5de;
+  border-radius: 10px;
+}
+
+.sip-inputs label {
+  display: block;
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+}
+
+.sip-inputs input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  font-size: 1rem;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.sip-inputs button {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 12px;
+  font-size: 1rem;
+  background-color: #38e078;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.sip-inputs button:hover {
+  background-color: #2fc168;
+}
+
+.text-indian {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.green-text {
+  color: #38e078;
+  font-weight: 600;
+}
+
+.sip-result h3 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.sip-result p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* Responsive for small screens */
+@media (max-width: 768px) {
+  .sip-layout {
+    flex-direction: column;
+  }
+
+  .sip-inputs,
+  .sip-result {
+    width: 100%;
+  }
+}
