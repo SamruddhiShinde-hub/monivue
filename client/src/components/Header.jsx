@@ -1,3 +1,4 @@
+import React from 'react';
 import './Header.css';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 
@@ -6,9 +7,13 @@ const Header = ({ isLoggedIn, user }) => {
   const location = useLocation();
 
   const handleLogout = () => {
+    // Clear user data from storage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    // Navigate to the login page to reset the app state
     navigate('/login');
+    // It might be necessary to reload or use state management to ensure UI updates
+    window.location.reload(); 
   };
 
   return (
@@ -37,7 +42,6 @@ const Header = ({ isLoggedIn, user }) => {
                 <NavLink to="/expenses" className={`dropdown-item ${location.pathname === '/expenses' ? 'active-item' : ''}`}>Expenses</NavLink>
                 <NavLink to="/assets" className={`dropdown-item ${location.pathname === '/assets' ? 'active-item' : ''}`}>Assets</NavLink>
                 <NavLink to="/liabilities" className={`dropdown-item ${location.pathname === '/liabilities' ? 'active-item' : ''}`}>Liabilities</NavLink>
-                {/* <NavLink to="/goals" className={`dropdown-item ${location.pathname === '/goals' ? 'active-item' : ''}`}>Goals</NavLink> */}
               </div>
             </div>
 
@@ -47,6 +51,7 @@ const Header = ({ isLoggedIn, user }) => {
               <div className="dropdown-content">
                 <NavLink to="/sip-calculator" className={`dropdown-item ${location.pathname === '/sip-calculator' ? 'active-item' : ''}`}>SIP Calculator</NavLink>
                 <NavLink to="/step-up-sip-calculator" className={`dropdown-item ${location.pathname === '/step-up-sip-calculator' ? 'active-item' : ''}`}>Step UP SIP Calculator</NavLink>
+                <NavLink to="/retirement-calculator" className={`dropdown-item ${location.pathname === '/retirement-calculator' ? 'active-item' : ''}`}>Retirement Calculator</NavLink>
               </div>
             </div>
 

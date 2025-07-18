@@ -1,12 +1,16 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Import Layout Components
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Import Page Components
 import Register from './pages/Register';
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
-import ProtectedRoute from './components/ProtectedRoute';
 import Overview from './pages/Overview';
 import Income from './pages/Income';
 import Expenses from './pages/Expenses';
@@ -16,12 +20,14 @@ import Goals from './pages/Goals';
 import NetWorth from './pages/NetWorth';
 import FinancialHealth from './pages/FinancialHealth';
 import SIPCalculator from './pages/SIPCalculator';
-import StepUpSIPCalculator from './pages/StepUpSIPCalculator'; // ✅ NEW
+import StepUpSIPCalculator from './pages/StepUpSIPCalculator';
+import RetirementCalculator from './pages/RetirementCalculator'; // Correctly imported
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
+  // Check for existing login token on initial app load
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
@@ -31,6 +37,7 @@ function App() {
     }
   }, []);
 
+  // Layout component to wrap protected pages with Header
   const Layout = ({ children }) => (
     <div className="app-container-no-sidebar">
       <Header isLoggedIn={isLoggedIn} user={user} />
@@ -61,7 +68,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/income"
             element={
@@ -72,7 +78,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/expenses"
             element={
@@ -83,7 +88,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/assets"
             element={
@@ -94,7 +98,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/liabilities"
             element={
@@ -105,7 +108,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/goals"
             element={
@@ -116,7 +118,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/net-worth"
             element={
@@ -127,7 +128,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/financial-health"
             element={
@@ -138,7 +138,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/sip-calculator"
             element={
@@ -149,7 +148,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/step-up-sip-calculator"
             element={
@@ -160,8 +158,17 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/retirement-calculator"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Layout>
+                  <RetirementCalculator />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-
         <Footer />
       </div>
     </Router>
