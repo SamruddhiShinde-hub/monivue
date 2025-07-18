@@ -15,7 +15,7 @@ const Overview = ({ user }) => {
   const [fixedDeposits, setFixedDeposits] = useState(0);
   const [monthlySavings, setMonthlySavings] = useState(0);
   const [totalMonthlyDebt, setTotalMonthlyDebt] = useState(0);
-  const [netWorth, setNetWorth] = useState(0); // NEW
+  const [netWorth, setNetWorth] = useState(0);
 
   const navigate = useNavigate();
 
@@ -65,7 +65,7 @@ const Overview = ({ user }) => {
 
       const totalAssets = assetRes.data.reduce((sum, item) => sum + Number(item.amount || 0), 0);
       const totalLiabilities = liabilityRes.data.reduce((sum, item) => sum + Number(item.amount || 0), 0);
-      setNetWorth(totalAssets - totalLiabilities); // NEW
+      setNetWorth(totalAssets - totalLiabilities);
 
       const allTransactions = [
         ...(incomeRes.data || []).map(item => ({
@@ -122,7 +122,6 @@ const Overview = ({ user }) => {
     if (date.toDateString() === today.toDateString()) return 'Today';
     if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
 
-    // Format as dd/mm/yyyy for dates older than yesterday
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
@@ -134,9 +133,14 @@ const Overview = ({ user }) => {
   const emergencyFundRatio = totalExpenses > 0 ? fixedDeposits / totalExpenses : 0;
   const netWorthToIncomeRatio = monthlyIncome > 0 ? netWorth / (monthlyIncome * 12) : 0;
 
-  let savings_rate_score = savingsRate > 30 ? 4 : savingsRate > 20 ? 3 : savingsRate > 10 ? 2 : 1;
-  let debt_to_income_score = debtToIncome < 21 ? 4 : debtToIncome < 31 ? 3 : debtToIncome < 41 ? 2 : 1;
-  let emergency_fund_score = emergencyFundRatio > 12 ? 4 : emergencyFundRatio > 6 ? 3 : emergencyFundRatio > 3 ? 2 : 1;
+  let savings_rate_score = savingsRate > 30 ? 4 : savingsRate > 20 ? 3 : savingsRate > 10 ? 2 : savingsRate > 0 ? 1 : 0;
+  
+  let debt_to_income_score = monthlyIncome > 0 
+    ? (debtToIncome < 21 ? 4 : debtToIncome < 31 ? 3 : debtToIncome < 41 ? 2 : 1) 
+    : 0;
+  
+  let emergency_fund_score = emergencyFundRatio > 12 ? 4 : emergencyFundRatio > 6 ? 3 : emergencyFundRatio > 3 ? 2 : emergencyFundRatio > 0 ? 1 : 0;
+  
   let net_worth_score = netWorthToIncomeRatio > 5 ? 4 : netWorthToIncomeRatio > 3 ? 3 : netWorthToIncomeRatio > 1 ? 2 : netWorthToIncomeRatio > 0 ? 1 : 0;
 
   const overall_score = savings_rate_score + debt_to_income_score + emergency_fund_score + net_worth_score;
@@ -144,6 +148,7 @@ const Overview = ({ user }) => {
   const normalizedScore = Math.round((overall_score / maxScore) * 100);
 
   const getHealthGrade = (score) => {
+    if (!score || score === 0) return null; // If score is 0, don't return a grade
     if (score >= 90) return 'Grade A';
     if (score >= 80) return 'Grade B';
     if (score >= 70) return 'Grade C';
