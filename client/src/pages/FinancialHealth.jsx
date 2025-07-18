@@ -208,40 +208,40 @@ const FinancialHealth = ({ user }) => {
             </tr>
           </thead>
           <tbody>
-            <tr className={`score-${savings_rate_score || 'NA'}`}>
+            <tr>
               <td>Savings Rate</td>
               <td>{savingsRate.toFixed(2)}%</td>
-              <td>{savings_rate_score}</td>
+              <td className="score-cell">{savings_rate_score}</td>
               <td>{savings_rate_result}</td>
               <td>{savings_rate_remark}</td>
             </tr>
-            <tr className={`score-${debt_to_income_score || 'NA'}`}>
+            <tr>
               <td>Debt-to-Income Ratio</td>
               <td>{debtToIncome.toFixed(2)}%</td>
-              <td>{debt_to_income_score}</td>
+              <td className="score-cell">{debt_to_income_score}</td>
               <td>{debt_to_income_result}</td>
               <td>{debt_to_income_remark}</td>
             </tr>
-            <tr className={`score-${net_worth_score || 'NA'}`}>
+            <tr>
               <td>Net Worth (as a multiple of annual income)</td>
               <td>{netWorthRatio.toFixed(2)}</td>
-              <td>{net_worth_score}</td>
+              <td className="score-cell">{net_worth_score}</td>
               <td>{net_worth_result}</td>
               <td>{net_worth_remark}</td>
             </tr>
-            <tr className={`score-${emergency_fund_score || 'NA'}`}>
+            <tr>
               <td>Emergency Fund Ratio</td>
               <td>{emergencyFundRatio.toFixed(2)}</td>
-              <td>{emergency_fund_score}</td>
+              <td className="score-cell">{emergency_fund_score}</td>
               <td>{emergency_fund_result}</td>
               <td>{emergency_fund_remark}</td>
             </tr>
             <tr>
-              <td className="overall-financial-health"><b>Overall Financial Health</b></td>
+              <td><b>Overall Financial Health</b></td>
               <td></td>
-              <td className="overall-financial-health"><b>{overall_score}</b></td>
-              <td className="overall-financial-health"><b>{overall_result}</b></td>
-              <td className="overall-financial-health"><b>{overall_remark}</b></td>
+              <td><b>{overall_score}</b></td>
+              <td><b>{overall_result}</b></td>
+              <td><b>{overall_remark}</b></td>
             </tr>
           </tbody>
         </table>

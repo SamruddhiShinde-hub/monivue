@@ -31,42 +31,19 @@
   border-bottom: 1px solid #eaeaea;
 }
 
-/* 🚫 Updated heading row to blue-gray */
+/* Header color is kept as requested */
 .financial-health-table thead {
   background-color: #e0e7ef;
   color: #1f2d3d;
   font-weight: bold;
 }
 
-/* ❌ Removed hover effect */
-/* .financial-health-table tbody tr:hover {
-  background-color: transparent;
-} */
-
 .financial-health-table td {
   color: #444;
 }
 
-/* ✅ Highlight overall row */
-.financial-health-table .overall-financial-health {
-  background-color: #f0f4fa;
+/* Kept for formatting the score number */
+.score-cell {
+  text-align: center;
   font-weight: bold;
-  color: #2e7d32;
-}
-
-/* ✅ Score-based row backgrounds */
-.score-4 {
-  background-color: #e8fbe9;
-}
-.score-3 {
-  background-color: #fff9e6;
-}
-.score-2 {
-  background-color: #fff0e6;
-}
-.score-1 {
-  background-color: #fdecea;
-}
-.score-NA {
-  background-color: #eeeeee;
 }
