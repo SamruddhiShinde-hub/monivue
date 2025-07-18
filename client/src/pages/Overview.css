@@ -1,233 +1,400 @@
------------ Main Container -----------
+/* Overview.css */
 .overview-page {
   padding: 2rem;
   width: auto;
-}
-
-.overview-page h2,
-.overview-page h3 {
-  text-align: left;
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }
 
 .overview-page h2 {
-  font-size: 1.5rem;
-  color: #000;
-  margin-bottom: 0.4rem;
+  font-size: 2rem;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
-.overview-page h3 {
-  font-size: 1.4rem;
-  color: #000;
-  margin: 1.5rem 0 0.5rem 0;
-}
-
-/* ----------- Overview Cards ----------- */
+/* ----------- Top Row - Financial Summary Cards ----------- */
 .overview-cards {
   display: flex;
   gap: 1.5rem;
-  flex-wrap: nowrap;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .overview-card {
   flex: 1;
-  border: 1px solid #DBE5DE;
-  border-radius: 8px;
-  padding: 0.5rem;
-  background-color: #fff;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.overview-card h4 {
-  margin: 0 0 0.5rem 0;
-  color: #555;
-  font-size: 1rem;
-}
-
-.overview-card p {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-  margin: 0;
-}
-
-.overview-card:nth-child(1) p { color: #38E078; }
-.overview-card:nth-child(2) p { color: #e74c3c; }
-.overview-card:nth-child(3) p { color: #38A1F2; }
-.overview-card:nth-child(4) p { color: #FF5722; }
-
-/* ----------- Recent Activity Table ----------- */
-.recent-activity {
-  border: 1px solid #e0e0e0;
+  background: white;
   border-radius: 12px;
-  background-color: #fff;
-  overflow-x: auto;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  margin: 0 0 2.5rem 0;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  position: relative;
+  overflow: hidden;
 }
 
-.activity-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-  min-width: 600px;
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.card-icon {
+  font-size: 1.25rem;
+  opacity: 0.8;
+}
+
+.card-amount {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
   margin: 0;
 }
 
-.activity-table thead {
-  background-color: #f9fafb;
-  border-bottom: 1px solid #e0e0e0;
-}
+.card-income .card-amount { color: #1a1a1a; }
+.card-expense .card-amount { color: #1a1a1a; }
+.card-assets .card-amount { color: #1a1a1a; }
+.card-liabilities .card-amount { color: #1a1a1a; }
 
-.activity-table th,
-.activity-table td {
-  padding: 4px 12px 4px 12px;
-  text-align: left;
-  border-bottom: 1px solid #f1f1f1;
-}
-
-.activity-table th {
-  color: #111827;
+.card-percentage {
+  font-size: 0.875rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  width: fit-content;
 }
 
-.activity-table td {
-  color: #374151;
-  font-size: 0.94rem;
+.card-percentage.positive {
+  background-color: #ecfdf5;
+  color: #059669;
 }
 
-.activity-table tr:last-child td {
-  border-bottom: none;
+.card-percentage.negative {
+  background-color: #fef2f2;
+  color: #dc2626;
 }
 
-/* .activity-table tr:hover {
-  background-color: #f9f9f9;
-} */
+/* ----------- Bottom Section - Three Boxes ----------- */
+.overview-bottom-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
 
-.type-badge {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 9999px;
+/* Financial Health Box */
+.financial-health-box {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-header h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.health-grade {
+  background: #ecfdf5;
+  color: #059669;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.health-score {
+  margin-bottom: 1.5rem;
+}
+
+.score-display {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.score-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.score-total {
+  font-size: 1.25rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.score-bar {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  transition: width 0.3s ease;
+}
+
+.health-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.metric-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Quick Actions Box */
+.quick-actions-box {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.quick-actions-box h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 1rem 0;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.add-income {
+  background: #ecfdf5;
+  border-color: #d1fae5;
+}
+
+.add-income:hover {
+  background: #d1fae5;
+}
+
+.add-expense {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.add-expense:hover {
+  background: #fecaca;
+}
+
+.set-goal {
+  background: #ecfdf5;
+  border-color: #d1fae5;
+}
+
+.set-goal:hover {
+  background: #d1fae5;
+}
+
+.action-icon {
+  font-size: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.action-content {
+  flex: 1;
+}
+
+.action-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.action-subtitle {
   font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Recent Activity Box */
+.recent-activity-box {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.recent-activity-box h3 {
+  font-size: 1.125rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  color: #1a1a1a;
+  margin: 0 0 1rem 0;
 }
 
-.type-badge.income {
-  background-color: #e6f9ee;
-  color: #1e7e34;
+.activity-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.type-badge.expense {
-  background-color: #ffe6e6;
-  color: #c82333;
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
-.amount.income {
-  color: #1e7e34;
+.activity-item:hover {
+  background: #f3f4f6;
+}
+
+.activity-icon {
+  font-size: 1.25rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-title {
+  font-size: 0.875rem;
   font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
 }
 
-.amount.expense {
-  color: #c82333;
-  font-weight: 600;
+.activity-amount {
+  font-size: 0.75rem;
+  color: #6b7280;
 }
 
-.no-data {
+.no-activity {
   text-align: center;
-  color: #888;
+  color: #9ca3af;
   font-style: italic;
   padding: 2rem;
 }
 
-/* ----------- Goals Section ----------- */
-.goal-overview {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+/* ----------- Responsive Design ----------- */
+@media (max-width: 1024px) {
+  .overview-bottom-section {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .overview-cards {
+    flex-wrap: wrap;
+  }
+  
+  .overview-card {
+    flex: 1 1 calc(50% - 0.75rem);
+    min-width: calc(50% - 0.75rem);
+  }
 }
 
-.goal-card {
-  border: 1px solid #DBE5DE;
-  padding: 1.5rem;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.goal-card h4 {
-  margin: 0 0 1rem 0;
-  color: #333;
-  font-size: 1.1rem;
-}
-
-.goal-card p {
-  margin: 0.5rem 0 0 0;
-  color: #555;
-  font-size: 0.9rem;
-}
-
-.progress-bar {
-  background-color: #eee;
-  height: 10px;
-  border-radius: 20px;
-  margin: 0.5rem 0;
-  overflow: hidden;
-}
-
-.progress-bar .fill {
-  background-color: #38E078;
-  height: 100%;
-  border-radius: 20px;
-  transition: width 0.6s ease;
-}
-
-/* ----------- Responsive ----------- */
 @media (max-width: 768px) {
   .overview-page {
-    margin: 80px 0 0 0;
-    width: 100%;
     padding: 1rem;
   }
 
   .overview-cards {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .overview-card {
-    flex: 1 1 calc(50% - 0.5rem);
-    min-width: calc(50% - 0.5rem);
-  }
-
-  .activity-table {
-    font-size: 0.85rem;
-  }
-
-  .activity-table th,
-  .activity-table td {
-    padding: 8px 12px;
-  }
-
-  .overview-page h2 {
-    font-size: 2rem;
-  }
-
-  .overview-page h3 {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .overview-cards {
     flex-direction: column;
+    gap: 1rem;
   }
 
   .overview-card {
     flex: 1 1 100%;
     min-width: 100%;
+  }
+
+  .overview-page h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .overview-page {
+    padding: 0.75rem;
+  }
+  
+  .overview-cards,
+  .overview-bottom-section {
+    gap: 0.75rem;
+  }
+  
+  .overview-card,
+  .financial-health-box,
+  .quick-actions-box,
+  .recent-activity-box {
+    padding: 1rem;
   }
 }
