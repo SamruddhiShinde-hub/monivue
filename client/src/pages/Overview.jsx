@@ -113,21 +113,6 @@ const Overview = ({ user }) => {
     }, 0);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (date.toDateString() === today.toDateString()) return 'Today';
-    if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
-
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
-
   const savingsRate = monthlyIncome > 0 ? (monthlySavings / monthlyIncome) * 100 : 0;
   const debtToIncome = monthlyIncome > 0 ? (totalMonthlyDebt / monthlyIncome) * 100 : 0;
   const emergencyFundRatio = totalExpenses > 0 ? fixedDeposits / totalExpenses : 0;
@@ -266,7 +251,7 @@ const Overview = ({ user }) => {
                   <div className="activity-content">
                     <div className="activity-title">{transaction.category || 'General'}</div>
                     <div className="activity-amount">
-                      ₹{Number(transaction.amount || 0).toLocaleString('en-IN')} • {formatDate(transaction.date)}
+                      ₹{Number(transaction.amount || 0).toLocaleString('en-IN')}
                     </div>
                   </div>
                 </div>

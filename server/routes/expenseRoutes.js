@@ -5,7 +5,8 @@ const db = require('../db');
 // Get all expenses for a user
 router.get('/user/:userId', (req, res) => {
   const { userId } = req.params;
-  db.query('SELECT * FROM expenses WHERE user_id = ?', [userId], (err, results) => {
+  // Added ORDER BY to show most recent entries first
+  db.query('SELECT * FROM expenses WHERE user_id = ? ORDER BY id DESC', [userId], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
@@ -13,10 +14,13 @@ router.get('/user/:userId', (req, res) => {
 
 // Add new expense
 router.post('/add', (req, res) => {
-  const { user_id, category, amount, date } = req.body;
+  // Removed 'date' from destructuring
+  const { user_id, category, amount } = req.body;
   db.query(
-    'INSERT INTO expenses (user_id, category, amount, date) VALUES (?, ?, ?, ?)',
-    [user_id, category, amount, date],
+    // Updated SQL query
+    'INSERT INTO expenses (user_id, category, amount) VALUES (?, ?, ?)',
+    // Updated parameters
+    [user_id, category, amount],
     (err, result) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ message: 'Expense added successfully', id: result.insertId });
@@ -27,10 +31,13 @@ router.post('/add', (req, res) => {
 // Update expense
 router.put('/update/:id', (req, res) => {
   const { id } = req.params;
-  const { category, amount, date } = req.body;
+  // Removed 'date' from destructuring
+  const { category, amount } = req.body;
   db.query(
-    'UPDATE expenses SET category = ?, amount = ?, date = ? WHERE id = ?',
-    [category, amount, date, id],
+    // Updated SQL query
+    'UPDATE expenses SET category = ?, amount = ? WHERE id = ?',
+    // Updated parameters
+    [category, amount, id],
     (err) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ message: 'Expense updated successfully' });
@@ -38,7 +45,7 @@ router.put('/update/:id', (req, res) => {
   );
 });
 
-// Delete expense
+// Delete expense (No changes needed)
 router.delete('/delete/:id', (req, res) => {
   const { id } = req.params;
   db.query('DELETE FROM expenses WHERE id = ?', [id], (err) => {

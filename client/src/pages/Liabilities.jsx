@@ -2,82 +2,98 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './Liabilities.css';
 import { Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend
-} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const liabilityCategories = [
-  'Credit Card Debt',
-  'Personal Loans',
-  'Student Loans',
-  'Home Mortgage',
-  'Car Loan',
-  'Medical Bills',
-  'Buy Now, Pay Later (BNPL) Balances',
-  'Home Equity Loan / Line of Credit (HELOC)',
-  'Business Loan (if personally guaranteed)',
-  'Outstanding Rent or Utility Bills'
+  'Credit Card Debt', 'Personal Loans', 'Student Loans', 'Home Mortgage', 'Car Loan',
+  'Medical Bills', 'Buy Now, Pay Later (BNPL) Balances', 'Home Equity Loan / Line of Credit (HELOC)',
+  'Business Loan (if personally guaranteed)', 'Outstanding Rent or Utility Bills'
 ];
 
-const formatDueDate = (rawDate) => {
-  if (!rawDate) return 'Invalid Date';
-  const date = new Date(rawDate);
-  if (isNaN(date)) return 'Invalid Date';
-
-  const day = date.getDate();
-  const month = date.toLocaleString('default', { month: 'long' });
-  const year = date.getFullYear();
-
-  const getOrdinalSuffix = (day) => {
-    if (day > 3 && day < 21) return 'th';
-    switch (day % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
-    }
-  };
-
-  return `${day}${getOrdinalSuffix(day)} ${month}, ${year}`;
-};
+// A reusable table component
+const LiabilityTable = ({
+  data,
+  formVisible,
+  newItem,
+  onCancel,
+  onChange,
+  onDelete,
+  onEdit,
+  onSave,
+}) => (
+  <table className="liability-table">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {formVisible && (
+        <tr className="inline-edit-row">
+          <td>
+            <select name="category" value={newItem.category} onChange={onChange} className="inline-select">
+              <option value="">Select Category</option>
+              {liabilityCategories.map((cat) => (<option key={cat} value={cat}>{cat}</option>))}
+            </select>
+          </td>
+          <td>
+            <input type="number" name="amount" value={newItem.amount} onChange={onChange} className="inline-input" placeholder="Amount"/>
+          </td>
+          <td>
+            <button className="save-btn" onClick={onSave}>✓</button>
+            <button className="cancel-btn" onClick={onCancel}>✕</button>
+          </td>
+        </tr>
+      )}
+      {data.map((item) => (
+        <tr key={item.id}>
+          <td>{item.category}</td>
+          <td>₹{parseFloat(item.amount).toLocaleString('en-IN')}</td>
+          <td>
+            <button className="edit-btn" onClick={() => onEdit(item)}>✏️</button>
+            <button className="delete-btn" onClick={() => onDelete(item.id)}>🗑️</button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
 
 const Liabilities = ({ user }) => {
-  // Regular Liabilities
-  const [data, setData] = useState([]);
+  // State for Regular Liabilities
+  const [liabilities, setLiabilities] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [newLiability, setNewLiability] = useState({ category: '', amount: '', due_date: '' });
+  const [newLiability, setNewLiability] = useState({ category: '', amount: '' });
   const [showInlineForm, setShowInlineForm] = useState(false);
   const [total, setTotal] = useState(0);
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
-  // Monthly Debt Payments
+  // State for Monthly Debt Payments
   const [monthlyDebtData, setMonthlyDebtData] = useState([]);
-  const [monthlyNew, setMonthlyNew] = useState({ category: '', amount: '', due_date: '' });
+  const [monthlyNew, setMonthlyNew] = useState({ category: '', amount: '' });
   const [monthlyEditingId, setMonthlyEditingId] = useState(null);
   const [monthlyDebtChart, setMonthlyDebtChart] = useState({ labels: [], datasets: [] });
   const [showMonthlyForm, setShowMonthlyForm] = useState(false);
-  const [monthlyTotal, setMonthlyTotal] = useState(0); // NEW
+  const [monthlyTotal, setMonthlyTotal] = useState(0);
 
-  const fetchData = useCallback(async () => {
+  // --- Data Fetching ---
+  const fetchLiabilities = useCallback(async () => {
+    if (!user?.id) return;
     try {
       const res = await axios.get(`/api/liabilities/user/${user.id}`);
-      setData(res.data);
+      setLiabilities(res.data);
+      const totalAmount = res.data.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+      setTotal(totalAmount);
 
-      const total = res.data.reduce((sum, item) => sum + parseFloat(item.amount), 0);
-      setTotal(total);
-
-      const categoryMap = {};
-      res.data.forEach(item => {
-        categoryMap[item.category] = (categoryMap[item.category] || 0) + parseFloat(item.amount);
-      });
-
+      const categoryMap = res.data.reduce((acc, item) => {
+        acc[item.category] = (acc[item.category] || 0) + parseFloat(item.amount);
+        return acc;
+      }, {});
       const colors = Object.keys(categoryMap).map((_, i) => `hsl(${(i * 36) % 360}, 70%, 60%)`);
-
       setChartData({
         labels: Object.keys(categoryMap),
         datasets: [{ label: 'Liability Distribution', data: Object.values(categoryMap), backgroundColor: colors }]
@@ -85,23 +101,21 @@ const Liabilities = ({ user }) => {
     } catch (err) {
       console.error('Error fetching liabilities:', err);
     }
-  }, [user.id]);
+  }, [user?.id]);
 
   const fetchMonthlyDebt = useCallback(async () => {
+    if (!user?.id) return;
     try {
       const res = await axios.get(`/api/liabilities/monthly-debt/user/${user.id}`);
       setMonthlyDebtData(res.data);
+      const totalAmount = res.data.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+      setMonthlyTotal(totalAmount);
 
-      const catMap = {};
-      res.data.forEach(item => {
-        catMap[item.category] = (catMap[item.category] || 0) + parseFloat(item.amount);
-      });
-
-      const total = res.data.reduce((sum, item) => sum + parseFloat(item.amount), 0); // NEW
-      setMonthlyTotal(total); // NEW
-
+      const catMap = res.data.reduce((acc, item) => {
+        acc[item.category] = (acc[item.category] || 0) + parseFloat(item.amount);
+        return acc;
+      }, {});
       const colors = Object.keys(catMap).map((_, i) => `hsl(${(i * 36) % 360}, 80%, 65%)`);
-
       setMonthlyDebtChart({
         labels: Object.keys(catMap),
         datasets: [{ data: Object.values(catMap), backgroundColor: colors, label: 'Monthly Debt Distribution' }]
@@ -109,90 +123,83 @@ const Liabilities = ({ user }) => {
     } catch (err) {
       console.error('Error fetching monthly debt payments:', err);
     }
-  }, [user.id]);
+  }, [user?.id]);
 
   useEffect(() => {
-    if (user?.id) {
-      fetchData();
-      fetchMonthlyDebt();
-    }
-  }, [user, fetchData, fetchMonthlyDebt]);
+    fetchLiabilities();
+    fetchMonthlyDebt();
+  }, [fetchLiabilities, fetchMonthlyDebt]);
 
-  const handleInlineChange = (e) => setNewLiability({ ...newLiability, [e.target.name]: e.target.value });
+  // --- Handlers for Regular Liabilities ---
+  const handleLiabilityChange = (e) => setNewLiability({ ...newLiability, [e.target.name]: e.target.value });
 
-  const handleSave = async () => {
-    const { category, amount, due_date } = newLiability;
-    if (!category || !amount || !due_date) return alert('All fields required.');
+  const handleLiabilitySave = async () => {
+    if (!newLiability.category || !newLiability.amount) return alert('Category and Amount are required.');
     try {
-      if (editingId) {
-        await axios.put(`/api/liabilities/update/${editingId}`, newLiability);
-      } else {
-        await axios.post('/api/liabilities/add', { ...newLiability, user_id: user.id });
-      }
-      setNewLiability({ category: '', amount: '', due_date: '' });
-      setEditingId(null);
-      setShowInlineForm(false);
-      fetchData();
+      const method = editingId ? 'put' : 'post';
+      const url = editingId ? `/api/liabilities/update/${editingId}` : '/api/liabilities/add';
+      await axios[method](url, { ...newLiability, user_id: user.id });
+      fetchLiabilities();
     } catch (err) {
       alert('Error saving liability.');
+    } finally {
+      setNewLiability({ category: '', amount: '' });
+      setEditingId(null);
+      setShowInlineForm(false);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Delete this liability?')) {
-      try {
-        await axios.delete(`/api/liabilities/delete/${id}`);
-        fetchData();
-      } catch (err) {
-        alert('Delete failed.');
-      }
+  const handleLiabilityDelete = async (id) => {
+    if (!window.confirm('Delete this liability?')) return;
+    try {
+      await axios.delete(`/api/liabilities/delete/${id}`);
+      fetchLiabilities();
+    } catch (err) {
+      alert('Delete failed.');
     }
   };
-
-  const handleEdit = (item) => {
-    const dueDate = item.due_date ? item.due_date.split('T')[0] : '';
-    setNewLiability({ category: item.category, amount: item.amount, due_date: dueDate });
+  
+  const handleLiabilityEdit = (item) => {
+    setNewLiability({ category: item.category, amount: item.amount });
     setEditingId(item.id);
     setShowInlineForm(true);
   };
-
-  const handleMonthlyChange = (e) => setMonthlyNew({ ...monthlyNew, [e.target.name]: e.target.value });
-
-  const handleMonthlySave = async () => {
-    const { category, amount, due_date } = monthlyNew;
-    if (!category || !amount || !due_date) return alert('All fields required.');
+  
+  // --- Handlers for Monthly Debt ---
+  const handleMonthlyDebtChange = (e) => setMonthlyNew({ ...monthlyNew, [e.target.name]: e.target.value });
+  
+  const handleMonthlyDebtSave = async () => {
+    if (!monthlyNew.category || !monthlyNew.amount) return alert('Category and Amount are required.');
     try {
-      if (monthlyEditingId) {
-        await axios.put(`/api/liabilities/monthly-debt/update/${monthlyEditingId}`, monthlyNew);
-      } else {
-        await axios.post('/api/liabilities/monthly-debt/add', { ...monthlyNew, user_id: user.id });
-      }
-      setMonthlyNew({ category: '', amount: '', due_date: '' });
-      setMonthlyEditingId(null);
-      setShowMonthlyForm(false);
+      const method = monthlyEditingId ? 'put' : 'post';
+      const url = monthlyEditingId ? `/api/liabilities/monthly-debt/update/${monthlyEditingId}` : '/api/liabilities/monthly-debt/add';
+      await axios[method](url, { ...monthlyNew, user_id: user.id });
       fetchMonthlyDebt();
     } catch (err) {
       alert('Error saving monthly debt.');
+    } finally {
+      setMonthlyNew({ category: '', amount: '' });
+      setMonthlyEditingId(null);
+      setShowMonthlyForm(false);
     }
   };
 
-  const handleMonthlyDelete = async (id) => {
-    if (window.confirm('Delete this monthly debt entry?')) {
-      try {
-        await axios.delete(`/api/liabilities/monthly-debt/delete/${id}`);
-        fetchMonthlyDebt();
-      } catch (err) {
-        alert('Delete failed.');
-      }
+  const handleMonthlyDebtDelete = async (id) => {
+    if (!window.confirm('Delete this monthly debt payment?')) return;
+    try {
+      await axios.delete(`/api/liabilities/monthly-debt/delete/${id}`);
+      fetchMonthlyDebt();
+    } catch (err) {
+      alert('Delete failed.');
     }
   };
 
-  const handleMonthlyEdit = (item) => {
-    const dueDate = item.due_date ? item.due_date.split('T')[0] : '';
-    setMonthlyNew({ category: item.category, amount: item.amount, due_date: dueDate });
+  const handleMonthlyDebtEdit = (item) => {
+    setMonthlyNew({ category: item.category, amount: item.amount });
     setMonthlyEditingId(item.id);
     setShowMonthlyForm(true);
   };
+
 
   return (
     <div className="liabilities-page">
@@ -200,74 +207,23 @@ const Liabilities = ({ user }) => {
       <div className="liabilities-layout">
         <div className="liabilities-left">
           <div className="liability-actions">
-            <button className="btn-light" onClick={() => {
-              setShowInlineForm(true);
-              setEditingId(null);
-              setNewLiability({ category: '', amount: '', due_date: '' });
-            }}>Add Liability</button>
+            <button className="btn-light" onClick={() => { setShowInlineForm(true); setEditingId(null); setNewLiability({ category: '', amount: '' }); }}>Add Liability</button>
           </div>
-          <div className="total-liability-card">
-            <h3>Total Liabilities</h3>
-            <p>₹{total.toLocaleString('en-IN')}</p>
-          </div>
+          <div className="total-liability-card"><h3>Total Liabilities</h3><p>₹{total.toLocaleString('en-IN')}</p></div>
           <h3>Liability Details</h3>
-          <table className="liability-table">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Due Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {showInlineForm && (
-                <tr className="inline-edit-row">
-                  <td>
-                    <select name="category" value={newLiability.category} onChange={handleInlineChange} className="inline-select">
-                      <option value="">Select Category</option>
-                      {liabilityCategories.map((cat) => (
-                        <option key={cat} value={cat}>{cat}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" name="amount" value={newLiability.amount} onChange={handleInlineChange} className="inline-input" />
-                  </td>
-                  <td>
-                    <input type="date" name="due_date" value={newLiability.due_date} onChange={handleInlineChange} className="inline-input" />
-                  </td>
-                  <td>
-                    <button className="save-btn" onClick={handleSave}>✓</button>
-                    <button className="cancel-btn" onClick={() => {
-                      setShowInlineForm(false);
-                      setEditingId(null);
-                    }}>✕</button>
-                  </td>
-                </tr>
-              )}
-              {data.map((item) => {
-                const isOverdue = new Date(item.due_date) < new Date();
-                return (
-                  <tr key={item.id}>
-                    <td>{item.category}</td>
-                    <td>₹{parseFloat(item.amount).toLocaleString('en-IN')}</td>
-                    <td className={isOverdue ? 'due-date-overdue' : 'due-date-upcoming'}>{formatDueDate(item.due_date)}</td>
-                    <td>
-                      <button className="edit-btn" onClick={() => handleEdit(item)}>✏️</button>
-                      <button className="delete-btn" onClick={() => handleDelete(item.id)}>🗑️</button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <LiabilityTable
+            data={liabilities}
+            formVisible={showInlineForm}
+            newItem={newLiability}
+            onCancel={() => { setShowInlineForm(false); setEditingId(null); }}
+            onChange={handleLiabilityChange}
+            onDelete={handleLiabilityDelete}
+            onEdit={handleLiabilityEdit}
+            onSave={handleLiabilitySave}
+          />
         </div>
         <div className="liabilities-right">
-          <div className="liability-chart-section">
-            <h3>Liability Distribution</h3>
-            <Pie data={chartData} />
-          </div>
+          <div className="liability-chart-section"><h3>Liability Distribution</h3><Pie data={chartData} /></div>
         </div>
       </div>
 
@@ -275,75 +231,22 @@ const Liabilities = ({ user }) => {
       <div className="liabilities-layout">
         <div className="liabilities-left">
           <div className="liability-actions">
-            <button className="btn-light" onClick={() => {
-              setShowMonthlyForm(true);
-              setMonthlyEditingId(null);
-              setMonthlyNew({ category: '', amount: '', due_date: '' });
-            }}>Add Monthly Debt</button>
+            <button className="btn-light" onClick={() => { setShowMonthlyForm(true); setMonthlyEditingId(null); setMonthlyNew({ category: '', amount: '' }); }}>Add Monthly Debt</button>
           </div>
-
-          <div className="total-liability-card">
-            <h3>Total Monthly Debt</h3>
-            <p>₹{monthlyTotal.toLocaleString('en-IN')}</p>
-          </div>
-
-          <table className="liability-table">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Due Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {showMonthlyForm && (
-                <tr className="inline-edit-row">
-                  <td>
-                    <select name="category" value={monthlyNew.category} onChange={handleMonthlyChange} className="inline-select">
-                      <option value="">Select Category</option>
-                      {liabilityCategories.map((cat) => (
-                        <option key={cat} value={cat}>{cat}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" name="amount" value={monthlyNew.amount} onChange={handleMonthlyChange} className="inline-input" />
-                  </td>
-                  <td>
-                    <input type="date" name="due_date" value={monthlyNew.due_date} onChange={handleMonthlyChange} className="inline-input" />
-                  </td>
-                  <td>
-                    <button className="save-btn" onClick={handleMonthlySave}>✓</button>
-                    <button className="cancel-btn" onClick={() => {
-                      setShowMonthlyForm(false);
-                      setMonthlyEditingId(null);
-                    }}>✕</button>
-                  </td>
-                </tr>
-              )}
-              {monthlyDebtData.map((item) => {
-                const isOverdue = new Date(item.due_date) < new Date();
-                return (
-                  <tr key={item.id}>
-                    <td>{item.category}</td>
-                    <td>₹{parseFloat(item.amount).toLocaleString('en-IN')}</td>
-                    <td className={isOverdue ? 'due-date-overdue' : 'due-date-upcoming'}>{formatDueDate(item.due_date)}</td>
-                    <td>
-                      <button className="edit-btn" onClick={() => handleMonthlyEdit(item)}>✏️</button>
-                      <button className="delete-btn" onClick={() => handleMonthlyDelete(item.id)}>🗑️</button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="total-liability-card"><h3>Total Monthly Debt</h3><p>₹{monthlyTotal.toLocaleString('en-IN')}</p></div>
+          <LiabilityTable
+            data={monthlyDebtData}
+            formVisible={showMonthlyForm}
+            newItem={monthlyNew}
+            onCancel={() => { setShowMonthlyForm(false); setMonthlyEditingId(null); }}
+            onChange={handleMonthlyDebtChange}
+            onDelete={handleMonthlyDebtDelete}
+            onEdit={handleMonthlyDebtEdit}
+            onSave={handleMonthlyDebtSave}
+          />
         </div>
         <div className="liabilities-right">
-          <div className="liability-chart-section">
-            <h3>Monthly Debt Breakdown</h3>
-            <Pie data={monthlyDebtChart} />
-          </div>
+          <div className="liability-chart-section"><h3>Monthly Debt Breakdown</h3><Pie data={monthlyDebtChart} /></div>
         </div>
       </div>
     </div>

@@ -30,7 +30,7 @@ const Income = ({ user }) => {
   const [editingId, setEditingId] = useState(null);
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalAnnualIncome, setTotalAnnualIncome] = useState(0);
-  const [newIncome, setNewIncome] = useState({ category: '', amount: '', date: '' });
+  const [newIncome, setNewIncome] = useState({ category: '', amount: '' });
   const [showInlineForm, setShowInlineForm] = useState(false);
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
@@ -43,19 +43,6 @@ const Income = ({ user }) => {
     } else {
       return num.toLocaleString('en-IN');
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getFullYear();
-    
-    const suffix = day === 1 || day === 21 || day === 31 ? 'st' :
-                   day === 2 || day === 22 ? 'nd' :
-                   day === 3 || day === 23 ? 'rd' : 'th';
-    
-    return `${day}${suffix} ${month}, ${year}`;
   };
 
   const fetchIncome = useCallback(async () => {
@@ -94,7 +81,7 @@ const Income = ({ user }) => {
   }, [user, fetchIncome]);
 
   const handleAddIncome = () => {
-    setNewIncome({ category: '', amount: '', date: '' });
+    setNewIncome({ category: '', amount: '' });
     setEditingId(null);
     setShowInlineForm(true);
   };
@@ -104,7 +91,7 @@ const Income = ({ user }) => {
   };
 
   const handleSaveInlineIncome = async () => {
-    if (!newIncome.category || !newIncome.amount || !newIncome.date) {
+    if (!newIncome.category || !newIncome.amount) {
       alert('Please fill all fields.');
       return;
     }
@@ -118,7 +105,7 @@ const Income = ({ user }) => {
         alert('Monthly Income added successfully!');
       }
 
-      setNewIncome({ category: '', amount: '', date: '' });
+      setNewIncome({ category: '', amount: '' });
       setEditingId(null);
       setShowInlineForm(false);
       fetchIncome();
@@ -129,7 +116,7 @@ const Income = ({ user }) => {
   };
 
   const handleCancelInlineEdit = () => {
-    setNewIncome({ category: '', amount: '', date: '' });
+    setNewIncome({ category: '', amount: '' });
     setEditingId(null);
     setShowInlineForm(false);
   };
@@ -138,7 +125,6 @@ const Income = ({ user }) => {
     setNewIncome({
       category: income.category,
       amount: income.amount,
-      date: income.date.split('T')[0],
     });
     setEditingId(income.id);
     setShowInlineForm(true);
@@ -158,8 +144,8 @@ const Income = ({ user }) => {
   };
 
   const handleExport = () => {
-    const headers = 'Category,Amount,Date\n';
-    const rows = incomeData.map(item => `${item.category},${item.amount},${item.date}`).join('\n');
+    const headers = 'Category,Amount\n';
+    const rows = incomeData.map(item => `${item.category},${item.amount}`).join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
     saveAs(blob, 'monthly_income_data.csv');
   };
@@ -197,7 +183,6 @@ const Income = ({ user }) => {
               <tr>
                 <th>Category</th>
                 <th>Amount</th>
-                <th>Date</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -228,15 +213,6 @@ const Income = ({ user }) => {
                     />
                   </td>
                   <td>
-                    <input
-                      type="date"
-                      name="date"
-                      value={newIncome.date}
-                      onChange={handleInlineChange}
-                      className="inline-input"
-                    />
-                  </td>
-                  <td>
                     <button 
                       onClick={handleSaveInlineIncome}
                       className="save-btn"
@@ -259,7 +235,6 @@ const Income = ({ user }) => {
                 <tr key={item.id}>
                   <td>{item.category}</td>
                   <td>₹{formatIndianNumber(parseFloat(item.amount))}</td>
-                  <td>{formatDate(item.date)}</td>
                   <td>
                     <button 
                       onClick={() => handleEdit(item)}
